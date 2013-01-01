@@ -11,14 +11,14 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// <summary>
     /// ダイアグラム上のすべての要素を管理するリスト
     /// </summary>
-    public List<DiagramElement> elements;
+    public List<DiagramElementBase> elements;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
     public RootObjectBase()
     {
-        elements = new List<IDiagramElement>();
+        elements = new List<DiagramElementBase>();
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// </returns>
     public IList<IDiagramElement> GetDrawableObject ()
     {
-        return elements;
+        return (IList<IDiagramElement>)elements;
     }
 
     /// <summary>
