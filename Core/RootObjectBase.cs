@@ -5,7 +5,6 @@ using System.Collections.Generic;
 /// データをすべて保持するクラス
 /// このクラスを継承したクラスでをGameObjectに割り当て、それを選択したときにエディタは動作する
 /// </summary>
-[System.Serializable]
 public abstract class RootObjectBase : MonoBehaviour, IRootObject
 {
     /// <summary>
