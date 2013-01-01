@@ -12,7 +12,7 @@ public interface IRootObject
     /// <returns>
     /// 描画可能な全ての要素(IDiagramElement)
     /// </returns>
-    IList<IDiagramElement> GetDrawableObject();
+    IList<DiagramElementBase> GetDrawableObject();
 
     /// <summary>
     /// マウスの座標から、その座標に存在するノードを取得する

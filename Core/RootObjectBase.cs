@@ -27,9 +27,9 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// <returns>
     /// 描画可能なオブジェクトのIList(IDiagramElement)
     /// </returns>
-    public IList<IDiagramElement> GetDrawableObject ()
+    public IList<DiagramElementBase> GetDrawableObject ()
     {
-        return (IList<IDiagramElement>)elements;
+        return elements;
     }
 
     /// <summary>
