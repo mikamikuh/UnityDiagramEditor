@@ -10,15 +10,32 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// <summary>
     /// ダイアグラム上のすべての要素を管理するリスト
     /// </summary>
-    public List<DiagramElementBase> elements;
+    public IList<IDiagramElement> elements;
+
+    /// <summary>
+    /// 本モデルと同期済かどうか
+    /// </summary>
+    protected bool initialized = false;
+    public bool IsInitialized
+    {
+        get
+        {
+            return initialized;
+        }
+    }
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
     public RootObjectBase()
     {
-        elements = new List<DiagramElementBase>();
+        elements = new List<IDiagramElement>();
     }
+
+    /// <summary>
+    /// このルートオブジェクトの本モデルとビューモデルを同期する
+    /// </summary>
+    public abstract void initialize();
 
     /// <summary>
     /// 描画可能なオブジェクトのリストを返す
@@ -26,7 +43,7 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// <returns>
     /// 描画可能なオブジェクトのIList(IDiagramElement)
     /// </returns>
-    public IList<DiagramElementBase> GetDrawableObject ()
+    public IList<IDiagramElement> GetDrawableObject ()
     {
         return elements;
     }
