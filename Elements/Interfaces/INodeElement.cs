@@ -7,11 +7,12 @@ using System.Collections;
 public interface INodeElement
 {
     /// <summary>
-    /// ノードの座標と大きさを表すRect
+    /// ノードの座標と大きさを表すRectを取得する
     /// </summary>
-    Rect Position
-    {
-        get;
-        set;
-    }
+    Rect GetViewRect();
+
+    /// <summary>
+    /// 表示用のRectを格納する
+    /// </summary>
+    void SetViewRect(Rect rect);
 }

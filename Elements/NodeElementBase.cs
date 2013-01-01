@@ -6,24 +6,17 @@ using System.Collections;
 /// ダイアグラム上のノードを表すクラス(シリアライズ可能)
 /// </summary>
 [System.Serializable]
-public class NodeElementBase : SelectableElementBase, INodeElement
+public abstract class NodeElementBase : SelectableElementBase, INodeElement
 {
     /// <summary>
-    /// エディタ上の座標と大きさを表現する為のクラス
+    /// ノードの座標と大きさを表すRectを取得する
     /// </summary>
-    public Rect Position
-    {
-        get;
-        set;
-    }
+    public abstract Rect GetViewRect();
 
     /// <summary>
-    /// コンストラクタ
+    /// 表示用のRectを格納する
     /// </summary>
-    public NodeElementBase()
-    {
-        Position = new Rect(0, 0, 100, 100);
-    }
+    public abstract void SetViewRect(Rect rect);
 
     /// <summary>
     /// ノードの矩形を描画する
@@ -32,7 +25,7 @@ public class NodeElementBase : SelectableElementBase, INodeElement
     {
         Color old = GUI.color;
         GUI.color = Color.blue;
-        GUI.Box (Position, "");
+        GUI.Box (GetViewRect(), "");
         GUI.color = old;
     }
 }

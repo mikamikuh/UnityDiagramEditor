@@ -15,6 +15,7 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// <summary>
     /// 本モデルと同期済かどうか
     /// </summary>
+    [System.NonSerialized]
     protected bool initialized = false;
     public bool IsInitialized
     {
@@ -64,7 +65,7 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
             if (e is INodeElement)
             {
                 INodeElement node = (INodeElement)e;
-                if (node.Position.Contains(position))
+                if (node.GetViewRect().Contains(position))
                 {
                     return node;
                 }

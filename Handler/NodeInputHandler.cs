@@ -79,8 +79,9 @@ public class NodeInputHandler : INodeInputHandler
         {
             isDrugging = true;
             selectedElement = CurrentElement;
-            drugOffset.x = position.x - selectedElement.Position.x;
-            drugOffset.y = position.y - selectedElement.Position.y;
+            Rect rect = selectedElement.GetViewRect();
+            drugOffset.x = position.x - rect.x;
+            drugOffset.y = position.y - rect.y;
         }
     }
 
@@ -92,10 +93,10 @@ public class NodeInputHandler : INodeInputHandler
     {
         if (isDrugging == true)
         {
-            Rect rect = selectedElement.Position;
+            Rect rect = selectedElement.GetViewRect ();
             rect.x = position.x - drugOffset.x;
             rect.y = position.y - drugOffset.y;
-            selectedElement.Position = rect;
+            selectedElement.SetViewRect(rect);
         }
     }
 
@@ -131,7 +132,7 @@ public class NodeInputHandler : INodeInputHandler
     {
         if (CurrentElement != null)
         {
-            Rect rect = CurrentElement.Position;
+            Rect rect = CurrentElement.GetViewRect();
             EditorGUIUtility.AddCursorRect (rect, MouseCursor.MoveArrow);
         }
     }
