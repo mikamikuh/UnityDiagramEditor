@@ -7,9 +7,12 @@ using System.Collections;
 [System.Serializable]
 public abstract class EdgeElementBase : SelectableElementBase, IEdgeElement
 {
-	public EdgeElementBase(IRootObject root) : base(root)
-	{
-	}
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    public EdgeElementBase(IRootObject root) : base(root)
+    {
+    }
 
     /// <summary>
     /// エッジ始点の座標を取得する
@@ -26,6 +29,7 @@ public abstract class EdgeElementBase : SelectableElementBase, IEdgeElement
     /// </summary>
     public override void OnGUI()
     {
-        DiagramUtil.DrawLine3 (GetSourcePosition(), GetDestinationPosition(), Color.red, 1.0f);
+        // TODO DiagramUtilを自前で(必要な分だけ)作成する
+        DiagramUtil.DrawLine (GetSourcePosition(), GetDestinationPosition(), Color.red, 1.0f, true, null, DiagramUtil.DestinationTexture);
     }
 }
