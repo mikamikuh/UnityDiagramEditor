@@ -2,9 +2,19 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
+/// <summary>
+/// エッジの作成が成功したときに呼ばれるデリゲート
+/// </summary>
 public delegate void CreateSuccessDelegate(INodeElement source, INodeElement destination);
-public delegate void CreateFailedDelegate();
 
+/// <summary>
+/// エッジの作成が終了した時に呼ばれるデリゲート
+/// </summary>
+public delegate void CreateFinishedDelegate();
+
+/// <summary>
+/// エッジ作成/変更時に使用するハンドラ
+/// </summary>
 public class EdgeCreateInputHandler : INodeInputHandler
 {
     /// <summary>
@@ -36,14 +46,20 @@ public class EdgeCreateInputHandler : INodeInputHandler
     /// <summary>
     /// エッジの編集が完了したときに呼ばれるデリゲート(Handlerを元に戻す)
     /// </summary>
-    private CreateFailedDelegate failedDelegate;
-    
+    private CreateFinishedDelegate finishedDelegate;
+
+    /// <summary>
+    /// エッジの作成が成功したときに呼ばれるデリゲート
+    /// </summary>
     private CreateSuccessDelegate successDelegate;
 
-    public EdgeCreateInputHandler(CreateSuccessDelegate successDelegate, CreateFailedDelegate failedDelegate)
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    public EdgeCreateInputHandler(CreateSuccessDelegate successDelegate, CreateFinishedDelegate failedDelegate)
     {
-		this.successDelegate = successDelegate;
-        this.failedDelegate = failedDelegate;
+        this.successDelegate = successDelegate;
+        this.finishedDelegate = failedDelegate;
     }
 
     /// <summary>
@@ -95,7 +111,7 @@ public class EdgeCreateInputHandler : INodeInputHandler
         }
         else
         {
-            failedDelegate();
+            finishedDelegate();
         }
     }
 
@@ -113,15 +129,15 @@ public class EdgeCreateInputHandler : INodeInputHandler
     /// </summary>
     public void OnMouseUp(Vector2 position)
     {
-        if(CurrentElement != null && selectedElement != CurrentElement) {
-			successDelegate(selectedElement, CurrentElement);
-        } else {
-			failedDelegate();
-		}
-		
-		        isDrugging = false;
-		selectedElement = null;
-        
+        if (CurrentElement != null && selectedElement != CurrentElement)
+        {
+            successDelegate(selectedElement, CurrentElement);
+        }
+
+        finishedDelegate();
+        isDrugging = false;
+        selectedElement = null;
+
     }
 
     /// <summary>
@@ -141,18 +157,22 @@ public class EdgeCreateInputHandler : INodeInputHandler
     /// <summary>
     /// OnGUIが呼ばれたときの処理
     /// マウスが要素上にあるとき、カーソルアイコンを移動中アイコンに変更する
+    /// 作成中のマウスに追随するエッジを描画する
     /// </summary>
     public void MouseUpdate(Vector2 destination)
     {
-		if (isDrugging == true) {
-			Rect rect = selectedElement.GetViewRect ();
-			Vector2 source = new Vector2 ();
-			source.x = rect.x + (rect.width / 2);
-			source.y = rect.y + (rect.height / 2);
+        // 一時的なエッジの描画
+        if (isDrugging == true)
+        {
+            Rect rect = selectedElement.GetViewRect ();
+            Vector2 source = new Vector2 ();
+            source.x = rect.x + (rect.width / 2);
+            source.y = rect.y + (rect.height / 2);
 
-			DiagramUtil.DrawLine3 (source, destination, Color.blue, 2.0f);
-		}
-		
+            DiagramUtil.DrawLine3 (source, destination, Color.red, 1.0f);
+        }
+
+        // カーソルアイコンの描画
         if (CurrentElement != null)
         {
             Rect rect = CurrentElement.GetViewRect();
