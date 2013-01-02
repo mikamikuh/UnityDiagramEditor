@@ -32,7 +32,7 @@ public abstract class NodeElementBase : SelectableElementBase, INodeElement
     {
         // TODO: 矩形のデザインを変更する
         Color old = GUI.color;
-        GUI.color = Color.blue;
+        GUI.color = Color.white;
         GUI.Box (GetViewRect(), "");
         GUI.color = old;
     }
