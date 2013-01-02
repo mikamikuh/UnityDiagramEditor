@@ -8,9 +8,31 @@ using System.Collections.Generic;
 public abstract class RootObjectBase : MonoBehaviour, IRootObject
 {
     /// <summary>
-    /// ダイアグラム上のすべての要素を管理するリスト
+    /// ノードのビューモデル一覧
     /// </summary>
-    public IList<IDiagramElement> elements;
+    public IList<INodeElement> NodeElements
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// エッジのビューモデル一覧
+    /// </summary>
+    public IList<IEdgeElement> EdgeElements
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    public RootObjectBase()
+    {
+        NodeElements = new List<INodeElement>();
+        EdgeElements = new List<IEdgeElement>();
+    }
 
     /// <summary>
     /// 本モデルと同期済かどうか
@@ -26,28 +48,9 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     }
 
     /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    public RootObjectBase()
-    {
-        elements = new List<IDiagramElement>();
-    }
-
-    /// <summary>
     /// このルートオブジェクトの本モデルとビューモデルを同期する
     /// </summary>
     public abstract void initialize();
-
-    /// <summary>
-    /// 描画可能なオブジェクトのリストを返す
-    /// </summary>
-    /// <returns>
-    /// 描画可能なオブジェクトのIList(IDiagramElement)
-    /// </returns>
-    public IList<IDiagramElement> GetDrawableObject ()
-    {
-        return elements;
-    }
 
     /// <summary>
     /// 対象のマウス座標に存在するノードを返す
@@ -60,7 +63,7 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
     /// </returns>
     public INodeElement GetNodeElement(Vector2 position)
     {
-        foreach (IDiagramElement e in elements)
+        foreach (IDiagramElement e in NodeElements)
         {
             if (e is INodeElement)
             {
@@ -69,6 +72,37 @@ public abstract class RootObjectBase : MonoBehaviour, IRootObject
                 {
                     return node;
                 }
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// IDを指定してダイアグラム上の要素を取得する
+    /// NodeElementsとEdgeElementsの両方から探索する
+    /// </summary>
+    /// <param name='id'>
+    /// 取得対象のID
+    /// </param>
+    /// <returns>
+    /// 発見した要素
+    /// </returns>
+    public IDiagramElement GetDiagramElement(string id)
+    {
+        foreach (IDiagramElement e in NodeElements)
+        {
+            if (e.GetId() == id)
+            {
+                return e;
+            }
+        }
+
+        foreach (IDiagramElement e in EdgeElements)
+        {
+            if (e.GetId() == id)
+            {
+                return e;
             }
         }
 

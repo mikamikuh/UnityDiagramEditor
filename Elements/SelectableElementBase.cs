@@ -6,4 +6,10 @@ using System.Collections;
 /// </summary>
 public abstract class SelectableElementBase : DiagramElementBase, ISelectableElement
 {
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    public SelectableElementBase(IRootObject root) : base(root)
+    {
+    }
 }

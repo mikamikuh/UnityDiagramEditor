@@ -15,12 +15,22 @@ public interface IRootObject
     }
 
     /// <summary>
-    /// 保持するダイアグラムの要素から、描画可能な要素を全て取得する
+    /// ノード用のビューモデル一覧
     /// </summary>
-    /// <returns>
-    /// 描画可能な全ての要素(IDiagramElement)
-    /// </returns>
-    IList<IDiagramElement> GetDrawableObject();
+    IList<INodeElement> NodeElements
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// エッジ用のビューモデル一覧
+    /// </summary>
+    IList<IEdgeElement> EdgeElements
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// マウスの座標から、その座標に存在するノードを取得する
@@ -32,6 +42,17 @@ public interface IRootObject
     /// 座標上に存在するノード(INodeELement)
     /// </returns>
     INodeElement GetNodeElement(Vector2 position);
+
+    /// <summary>
+    /// IDを指定してダイアグラム上の要素を取得する
+    /// </summary>
+    /// <param name='id'>
+    /// 取得対象のID
+    /// </param>
+    /// <returns>
+    /// 発見した要素
+    /// </returns>
+    IDiagramElement GetDiagramElement(string id);
 
     /// <summary>
     /// このルートオブジェクトの本モデルとビューモデルを同期する

@@ -8,6 +8,30 @@ using System.Collections;
 public abstract class DiagramElementBase : IDiagramElement
 {
     /// <summary>
+    /// この要素を保持するルートオブジェクト
+    /// </summary>
+    [System.NonSerialized]
+    protected IRootObject root;
+    public IRootObject Root
+    {
+        get
+        {
+            return root;
+        }
+    }
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name='root'>
+    /// ルートオブジェクト
+    /// </param>
+    public DiagramElementBase(IRootObject root)
+    {
+        this.root = root;
+    }
+
+    /// <summary>
     /// オーバーライドし、GUI処理の記述を実装すること
     /// </summary>
     public virtual void OnGUI ()
@@ -25,4 +49,9 @@ public abstract class DiagramElementBase : IDiagramElement
     {
         throw new System.NotImplementedException ();
     }
+
+    /// <summary>
+    /// 本モデルからUUIDを取得する
+    /// </summary>
+    public abstract string GetId();
 }

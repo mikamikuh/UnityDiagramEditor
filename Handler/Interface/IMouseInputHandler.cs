@@ -7,6 +7,15 @@ using System.Collections;
 public interface IMouseInputHandler
 {
     /// <summary>
+    /// イベント発生時、マウス座標に存在する要素を格納する
+    /// </summary>
+    INodeElement CurrentElement
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// 右クリックされたときの処理
     /// </summary>
     void OnContextClick ();
@@ -68,5 +77,5 @@ public interface IMouseInputHandler
     /// 何も発生しなかった場合に呼ばれる
     /// EditorWindow.wantsMouseMoveがtureの場合、毎フレーム毎に呼ばれる
     /// </summary>
-    void MouseUpdate();
+    void MouseUpdate(Vector2 position);
 }

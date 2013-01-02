@@ -7,6 +7,14 @@ using System.Collections;
 public interface IDiagramElement
 {
     /// <summary>
+    /// この要素を保持するルートオブジェクト
+    /// </summary>
+    IRootObject Root
+    {
+        get;
+    }
+
+    /// <summary>
     /// 要素の描画処理を実装する
     /// </summary>
     void OnGUI();
@@ -18,4 +26,9 @@ public interface IDiagramElement
     /// 選択中のIRootObject
     /// </returns>
     IRootObject GetRootObject();
+
+    /// <summary>
+    /// IDを取得する
+    /// </summary>
+    string GetId ();
 }

@@ -13,6 +13,11 @@ public abstract class EasyDiagramEditorBase : EditorWindow
     protected INodeInputHandler NodeHandler;
 
     /// <summary>
+    /// エッジの作成時の入力ハンドラ
+    /// </summary>
+    protected INodeInputHandler EdgeCreateMouseHandler;
+
+    /// <summary>
     /// 保持するルートオブジェクト
     /// </summary>
     protected IRootObject RootObject;
@@ -24,7 +29,8 @@ public abstract class EasyDiagramEditorBase : EditorWindow
     public EasyDiagramEditorBase()
     {
         NodeHandler = new NodeInputHandler();
-        InputHandlerRoot.INSTANCE.MouseHandler = NodeHandler;
+        EdgeCreateMouseHandler = new EdgeCreateInputHandler(CreateEdge, ChangeNormalMode);
+        ChangeNormalMode();
     }
 
     /// <summary>
@@ -33,6 +39,35 @@ public abstract class EasyDiagramEditorBase : EditorWindow
     public void OnGUI()
     {
         Vector2 position = Event.current.mousePosition;
-        NodeHandler.CurrentElement = RootObject.GetNodeElement(position);
+        InputHandlerRoot.INSTANCE.MouseHandler.CurrentElement = RootObject.GetNodeElement(position);
     }
+
+    /// <summary>
+    /// ハンドラをNodeHandlerに変更する
+    /// TODO HandlerManagerクラスの作成
+    /// </summary>
+    public void ChangeNormalMode()
+    {
+        InputHandlerRoot.INSTANCE.MouseHandler = NodeHandler;
+    }
+
+    /// <summary>
+    /// ハンドラをEdgeCreateMouseHandlerに変更する
+    /// TODO HandlerManagerクラスの作成
+    /// </summary>
+    public void ChangeEdgeMode()
+    {
+        InputHandlerRoot.INSTANCE.MouseHandler = EdgeCreateMouseHandler;
+    }
+
+    /// <summary>
+    /// 遷移元/遷移先フェーズを設定してエッジを作成する
+    /// </summary>
+    /// <param name='source'>
+    /// 遷移元フェーズ ビューモデル
+    /// </param>
+    /// <param name='destination'>
+    /// 遷移先フェーズ ビューモデル
+    /// </param>
+    public abstract void CreateEdge(INodeElement source, INodeElement destination);
 }

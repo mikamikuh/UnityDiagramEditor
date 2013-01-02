@@ -2,12 +2,11 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
-/// <summary>
-/// ノードに関するマウス入力のハンドラ
-/// </summary>
-public class NodeInputHandler : INodeInputHandler
-{
+public delegate void CreateSuccessDelegate(INodeElement source, INodeElement destination);
+public delegate void CreateFailedDelegate();
 
+public class EdgeCreateInputHandler : INodeInputHandler
+{
     /// <summary>
     /// マウス座標から取得したノード
     /// </summary>
@@ -33,6 +32,19 @@ public class NodeInputHandler : INodeInputHandler
     /// ノードをクリックした位置を起点に、ノードを動かせるようにする為に必要
     /// </summary>
     private Vector2 drugOffset;
+
+    /// <summary>
+    /// エッジの編集が完了したときに呼ばれるデリゲート(Handlerを元に戻す)
+    /// </summary>
+    private CreateFailedDelegate failedDelegate;
+    
+    private CreateSuccessDelegate successDelegate;
+
+    public EdgeCreateInputHandler(CreateSuccessDelegate successDelegate, CreateFailedDelegate failedDelegate)
+    {
+		this.successDelegate = successDelegate;
+        this.failedDelegate = failedDelegate;
+    }
 
     /// <summary>
     /// TODO 右クリック時の処理を書く
@@ -69,6 +81,7 @@ public class NodeInputHandler : INodeInputHandler
     /// <summary>
     /// マウスの左ボタンが押下されたときの処理
     /// 押下されたとき、そこにノードがあればドラッグ状態にする
+    /// そうでなければ、エッジ作成モードから抜ける
     /// </summary>
     /// <param name='position'>
     /// 押下されたときの座標
@@ -79,9 +92,10 @@ public class NodeInputHandler : INodeInputHandler
         {
             isDrugging = true;
             selectedElement = CurrentElement;
-            Rect rect = selectedElement.GetViewRect();
-            drugOffset.x = position.x - rect.x;
-            drugOffset.y = position.y - rect.y;
+        }
+        else
+        {
+            failedDelegate();
         }
     }
 
@@ -89,15 +103,8 @@ public class NodeInputHandler : INodeInputHandler
     /// マウスがドラッグされたときの処理
     /// ドラッグ中であれば、ドラッグと同時に対象のノードを移動する
     /// </summary>
-    public void OnMouseDrag(Vector2 position)
+    public void OnMouseDrag(Vector2 destination)
     {
-        if (isDrugging == true)
-        {
-            Rect rect = selectedElement.GetViewRect ();
-            rect.x = position.x - drugOffset.x;
-            rect.y = position.y - drugOffset.y;
-            selectedElement.SetViewRect(rect);
-        }
     }
 
     /// <summary>
@@ -106,8 +113,15 @@ public class NodeInputHandler : INodeInputHandler
     /// </summary>
     public void OnMouseUp(Vector2 position)
     {
-        isDrugging = false;
-        selectedElement = null;
+        if(CurrentElement != null && selectedElement != CurrentElement) {
+			successDelegate(selectedElement, CurrentElement);
+        } else {
+			failedDelegate();
+		}
+		
+		        isDrugging = false;
+		selectedElement = null;
+        
     }
 
     /// <summary>
@@ -128,12 +142,21 @@ public class NodeInputHandler : INodeInputHandler
     /// OnGUIが呼ばれたときの処理
     /// マウスが要素上にあるとき、カーソルアイコンを移動中アイコンに変更する
     /// </summary>
-    public void MouseUpdate(Vector2 position)
+    public void MouseUpdate(Vector2 destination)
     {
+		if (isDrugging == true) {
+			Rect rect = selectedElement.GetViewRect ();
+			Vector2 source = new Vector2 ();
+			source.x = rect.x + (rect.width / 2);
+			source.y = rect.y + (rect.height / 2);
+
+			DiagramUtil.DrawLine3 (source, destination, Color.blue, 2.0f);
+		}
+		
         if (CurrentElement != null)
         {
             Rect rect = CurrentElement.GetViewRect();
-            EditorGUIUtility.AddCursorRect (rect, MouseCursor.MoveArrow);
+            EditorGUIUtility.AddCursorRect (rect, MouseCursor.ArrowPlus);
         }
     }
 }

@@ -13,7 +13,7 @@ public class InputHandlerRoot
     public static InputHandlerRoot INSTANCE = new InputHandlerRoot();
 
     /// <summary>
-    /// マウスの入力ハンドラを管理するリスト
+    /// マウスの入力ハンドラ
     /// </summary>
     public IMouseInputHandler MouseHandler
     {
@@ -72,7 +72,7 @@ public class InputHandlerRoot
             handler.MouseMove(position);
             break;
         default:
-            handler.MouseUpdate();
+            handler.MouseUpdate(position);
             break;
         }
     }

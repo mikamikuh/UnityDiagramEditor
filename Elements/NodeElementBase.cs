@@ -9,6 +9,13 @@ using System.Collections;
 public abstract class NodeElementBase : SelectableElementBase, INodeElement
 {
     /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    public NodeElementBase(IRootObject root) : base(root)
+    {
+    }
+
+    /// <summary>
     /// ノードの座標と大きさを表すRectを取得する
     /// </summary>
     public abstract Rect GetViewRect();
@@ -23,6 +30,7 @@ public abstract class NodeElementBase : SelectableElementBase, INodeElement
     /// </summary>
     public override void OnGUI()
     {
+        // TODO: 矩形のデザインを変更する
         Color old = GUI.color;
         GUI.color = Color.blue;
         GUI.Box (GetViewRect(), "");
