@@ -24,7 +24,7 @@ public abstract class EasyDiagramEditorBase : EditorWindow
     public EasyDiagramEditorBase()
     {
         NodeHandler = new NodeInputHandler();
-        InputHandlerRoot.INSTANCE.MouseHandlers.Add (NodeHandler);
+        InputHandlerRoot.INSTANCE.MouseHandler = NodeHandler;
     }
 
     /// <summary>

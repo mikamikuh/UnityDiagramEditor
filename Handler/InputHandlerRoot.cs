@@ -15,18 +15,10 @@ public class InputHandlerRoot
     /// <summary>
     /// マウスの入力ハンドラを管理するリスト
     /// </summary>
-    public IList<IMouseInputHandler> MouseHandlers
+    public IMouseInputHandler MouseHandler
     {
         get;
         set;
-    }
-
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    public InputHandlerRoot()
-    {
-        MouseHandlers = new List<IMouseInputHandler>();
     }
 
     /// <summary>
@@ -34,10 +26,7 @@ public class InputHandlerRoot
     /// </summary>
     public void ExecuteInputHandlers ()
     {
-        foreach (IMouseInputHandler handler in MouseHandlers)
-        {
-            Execute (handler);
-        }
+        Execute (MouseHandler);
     }
 
     /// <summary>
